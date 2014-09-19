@@ -5,14 +5,14 @@ var gameOptions = {
   width: 700,
   nEnemies: 30,
   padding: 20
-}
+};
 
 
 /* Yet to use*/
 var gameStats = {
-  score: 0,
-  bestScore: 0
-}
+  score: 50,
+  bestScore: 20
+};
 
 // axes to set the size of the board and the number of pixels
 var axes = {
@@ -21,6 +21,16 @@ var axes = {
 }
 
 var gameBoard = d3.select('.container')
-    .append('svg:svg')
-    .attr('width', gameOptions.width)
-    .attr('height', gameOptions.height)
+  .append('svg:svg')
+  .attr('width', gameOptions.width)
+  .attr('height', gameOptions.height)
+
+var updateScore = function(){
+  d3.select('.current-score span')
+    .text(gameStats.score.toString())
+};
+
+var updateBestScore = function () {
+  gameStats.bestScore = Math.max(gameStats.bestScore, gameStats.score);
+  d3.select(".high-score span").text(gameStats.bestScore.toString());
+}
