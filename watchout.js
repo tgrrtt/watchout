@@ -34,3 +34,25 @@ var updateBestScore = function () {
   gameStats.bestScore = Math.max(gameStats.bestScore, gameStats.score);
   d3.select(".high-score span").text(gameStats.bestScore.toString());
 }
+
+// Player definition
+// skipping player for now
+
+
+// Enemy Definitions
+
+var createEnemies = function () {
+  var counter = gameOptions.nEnemies;
+  var enemyArray = [];
+  for (var i = 0; i < gameOptions.nEnemies; i++) {
+    var aEnemy = {
+      id: i,
+      x: Math.random()*100,
+      y: Math.random()*100
+    };
+    enemyArray.push(aEnemy);
+  }
+  return enemyArray;
+}
+
+console.log(createEnemies());
