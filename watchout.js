@@ -7,8 +7,6 @@ var gameOptions = {
   padding: 20
 };
 
-
-/* Yet to use*/
 var gameStats = {
   score: 50,
   bestScore: 20
@@ -37,8 +35,46 @@ var updateBestScore = function () {
   d3.select(".high-score span").text(gameStats.bestScore.toString());
 }
 
-// Player definition
-// skipping player for now
+// var drag = d3.behavior.drag()
+//         .on("drag", function(d,i) {
+//             d.x += d3.event.dx
+//             d.y += d3.event.dy
+//             d3.select(this).attr("transform", function(d,i){
+//                 return "translate(" + [ d.x,d.y ] + ")"
+//             })
+//         });
+
+var drag = d3.behavior.drag()
+    .origin(function(d) { return d; })
+    .on("dragstart", dragstarted)
+    .on("drag", dragged)
+    .on("dragend", dragended);
+
+function dragstarted(d) {
+  d3.event.sourceEvent.stopPropagation();
+  d3.select(this).classed("dragging", true);
+}
+
+function dragged(d) {
+  d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+}
+
+function dragended(d) {
+  d3.select(this).classed("dragging", false);
+}
+
+
+var player = d3.select("svg")
+    .selectAll("circle")
+      .data([{"x":200, "y":200}])
+    .enter().append("circle")
+      .style("fill", "green")
+      .attr("class", "player1")
+      .attr("r", 5)
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .call(drag);
+
 
 
 // Enemy Definitions
@@ -93,10 +129,12 @@ var render = function(enemyData) {
       x: parseFloat(enemy.attr('cx')),
       y: parseFloat(enemy.attr('cy'))
     }
+
     var endPos = {
       x: axes.x(endData.x),
       y: axes.y(endData.y)
     }
+    console.log(player.attr('cx'))
 
     return function(t) {
       // checkCollision(enemy, onCollision);
@@ -119,7 +157,9 @@ var render = function(enemyData) {
 }
 
 var play = function() {
+
   var gameTurn = function() {
+
     var newEnemyPositions = createEnemies();
     render(newEnemyPositions);
   }
@@ -129,7 +169,7 @@ var play = function() {
   }
   gameTurn();
   setInterval(gameTurn, 2000);
-  //setInterval(increaseScore, 50);
+  setInterval(increaseScore, 50);
 }
 
 play();
